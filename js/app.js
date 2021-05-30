@@ -2,12 +2,18 @@
 
 // Global variabls
 const allProductImages = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'water-can.jpg', 'wine-glass.jpg'];
-let totalClicks = 25;
-const allProducts = [];
+const numberOfRounds = 10;
+let totalClicks = numberOfRounds;
+const imagesToDisplay = 3;
+const duplicateTop = imagesToDisplay * 2;
+const sliceStart = imagesToDisplay;
+const sliceEnd = imagesToDisplay * 2;
+let allProducts = [];
 let duplicateNumbers = [];
 
 // JS to HTML links
-let productContainer = document.getElementById('prod-container');
+// let imagesContainer = document.getElementById('images-container');
+let displayContainer = document.getElementById('prod-container');
 let buttonGroup = document.getElementById('buttons');
 let leftImage = document.getElementById('image1');
 let centerImage = document.getElementById('image2');
@@ -41,10 +47,11 @@ function buildProducts() {
 
     new Product(allProductImages[i].slice(0, -4).capitalize(), `img/${allProductImages[i]}`);
   }
+  displayContainer.addEventListener('click', clickHandler);
 }
 
 function uniqueProducts() {
-  while (duplicateNumbers.length < 6) {
+  while (duplicateNumbers.length < duplicateTop) {
     let number = randomGenerator();
     if (!duplicateNumbers.includes(number)) {
       duplicateNumbers.push(number);
@@ -63,22 +70,18 @@ function renderImages() {
   allProducts[index2].showCount++;
   rightImage.src = allProducts[index3].displayImage;
   allProducts[index3].showCount++;
-
 }
 
 function clickHandler(event) {
-  if (event.target === productContainer) {
-
+  if (event.target === displayContainer) {
     displayMessage.style.display = 'block';
     return;
   }
   if (event.target === displayMessage) {
     displayMessage.style.display = 'none';
-
     return;
   }
   displayMessage.style.display = 'none';
-
   totalClicks--;
   const imageClicked = event.target.id;
   if (imageClicked === 'image1') {
@@ -90,16 +93,16 @@ function clickHandler(event) {
   if (imageClicked === 'image3') {
     allProducts[duplicateNumbers[2]].clickCount++;
   }
-  duplicateNumbers = duplicateNumbers.slice(3,6);
+  duplicateNumbers = duplicateNumbers.slice(sliceStart,sliceEnd);
   if (totalClicks === 0) {
-    productContainer.removeEventListener('click', clickHandler);
+    displayContainer.removeEventListener('click', clickHandler);
     buttonGroup.style.display = 'block';
-    buttonGroup.addEventListener('click', displayStatusHandler);
+    buttonGroup.addEventListener('click', displayResultsHandler);
   }
   renderImages();
 }
 
-function displayStatusHandler() {
+function displayResultsHandler() {
   statusArea.innerHTML = '';
   for (let i = 0; i < allProducts.length; i++ ) {
     let el = document.createElement('li');
@@ -109,11 +112,25 @@ function displayStatusHandler() {
     Shown: ${allProducts[i].showCount}.<br><hr>`;
     statusArea.appendChild(el);
   }
+  buttonGroup.removeEventListener('click', displayResultsHandler);
+  buttonGroup.textContent = 'Click to Restart';
+  buttonGroup.addEventListener('click', restart);
 }
+
+function restart() {
+  allProducts = [];
+  buttonGroup.style.display = 'none';
+  buttonGroup.textContent = 'View Results';
+  statusArea.innerHTML = '';
+  totalClicks = numberOfRounds + 1;
+  buttonGroup.removeEventListener('click', restart);
+  buildProducts();
+}
+
 
 // Start site
 buildProducts();
 renderImages();
 
 // Event listener
-productContainer.addEventListener('click', clickHandler);
+// displayContainer.addEventListener('click', clickHandler);
