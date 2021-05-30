@@ -1,24 +1,20 @@
 'use strict';
 
 // Global variabls
-// const allProductNames = [];
 const allProductImages = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'water-can.jpg', 'wine-glass.jpg'];
 let totalClicks = 25;
 const allProducts = [];
 let duplicateNumbers = [];
 
-// Current products being displayed
-let productLeft = '';
-let productCenter = '';
-let productRight = '';
-
 // JS to HTML links
 let productContainer = document.getElementById('prod-container');
-let buttonGroup = document.getElementById('button-group');
+let buttonGroup = document.getElementById('buttons');
 let leftImage = document.getElementById('image1');
 let centerImage = document.getElementById('image2');
 let rightImage = document.getElementById('image3');
-let displayMessage = document.querySelector('section div');
+let statusArea = document.querySelector('aside ul');
+statusArea.innterHTML = '';
+let displayMessage = document.getElementById('message');
 displayMessage.textContent = 'Click on an image please!';
 
 // Constructor for Product
@@ -58,42 +54,61 @@ function uniqueProducts() {
 
 function renderImages() {
   uniqueProducts();
-  const index1 = +duplicateNumbers[0];
-  const index2 = +duplicateNumbers[1];
-  const index3 = +duplicateNumbers[2];
+  const index1 = duplicateNumbers[0];
+  const index2 = duplicateNumbers[1];
+  const index3 = duplicateNumbers[2];
   leftImage.src = allProducts[index1].displayImage;
   allProducts[index1].showCount++;
-  productLeft = allProducts[index1];
   centerImage.src = allProducts[index2].displayImage;
   allProducts[index2].showCount++;
-  productCenter = allProducts[index2];
   rightImage.src = allProducts[index3].displayImage;
   allProducts[index3].showCount++;
-  productRight = allProducts[index3];
-  duplicateNumbers = duplicateNumbers.slice(3,6);
+
 }
 
 function clickHandler(event) {
   if (event.target === productContainer) {
-    displayMessage.style = 'visibility: visible';
+
+    displayMessage.style.display = 'block';
     return;
   }
+  if (event.target === displayMessage) {
+    displayMessage.style.display = 'none';
+
+    return;
+  }
+  displayMessage.style.display = 'none';
+
   totalClicks--;
   const imageClicked = event.target.id;
   if (imageClicked === 'image1') {
-    productLeft.clickCount++;
+    allProducts[duplicateNumbers[0]].clickCount++;
   }
   if (imageClicked === 'image2') {
-    productCenter.clickCount++;
+    allProducts[duplicateNumbers[1]].clickCount++;
   }
   if (imageClicked === 'image3') {
-    productRight.clickCount++;
+    allProducts[duplicateNumbers[2]].clickCount++;
   }
+  duplicateNumbers = duplicateNumbers.slice(3,6);
   if (totalClicks === 0) {
     productContainer.removeEventListener('click', clickHandler);
+    buttonGroup.style.display = 'block';
+    buttonGroup.addEventListener('click', displayStatusHandler);
   }
-  displayMessage.style = 'visibility: hidden';
   renderImages();
+}
+
+function displayStatusHandler() {
+  statusArea.innerHTML = '';
+  for (let i = 0; i < allProducts.length; i++ ) {
+    let el = document.createElement('li');
+    el.innerHTML = `
+    ${allProducts[i].name}:<br>
+    clicked: ${allProducts[i].clickCount}.<br>
+    Shown: ${allProducts[i].showCount}.<br><hr>`;
+    statusArea.appendChild(el);
+  }
 }
 
 // Start site
