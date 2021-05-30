@@ -1,0 +1,155 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: bisque;
+  padding-top: 90px;
+}
+
+main {
+  height: 100vh;
+}
+
+.header-main {
+  height: 75px;
+  width: 100%;
+  background-color: rgb(222, 131, 131);
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 0 1rem;
+  z-index: 10;
+}
+
+.header-main h1 {
+  font-size: 3em;
+  margin-top: 0;
+}
+
+main {
+  width: 960px;
+  margin: auto;
+}
+
+main h1 {
+  margin-top: 100px;
+  font-size: 50px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.side-stats {
+  border: 1px solid black;
+  float: left;
+  height: 500px;
+  width: 20%;
+  margin-left: 10px;
+  margin-top: 30px;
+  overflow: scroll;
+}
+
+.side-stats h1 {
+  margin-top: 0;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.side-stats li {
+  list-style: none;
+  margin: 0 40px 0 0px;
+  font-size: 1.2em;
+  line-height: 1.2em;
+}
+
+#prod-container {
+  border: 1px solid black;
+  height: 500px;
+  width: 75%;
+  margin-top: 30px;
+  margin-left: 10px;
+  float: left;
+}
+
+#prod-container h1 {
+  margin: auto;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+#prod-container img {
+  border: 1px solid black;
+  height: 210px;
+  width: 210px;
+  margin-top: 20px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+#prod-container img:hover {
+  border: 5px solid black;
+}
+
+#message {
+  text-align: center;
+  display: none;
+  margin: auto;
+  width: 95%;
+  padding: 20px;
+  background-color: red;
+  color: white;
+  font-size: 1.5em;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+#buttons {
+  text-align: center;
+  display: none;
+  margin: auto;
+  padding: 20px;
+  margin-top: 10px;
+  width: 95%;
+  background-color: rgb(122, 163, 235);
+  color: white;
+  font-size: 1.25em;
+  border-radius: 10px;
+}
+
+#message:hover,
+#buttons:hover {
+  cursor: pointer;
+  background-color: rgb(222, 131, 131);
+  color: black;
+}
+
+.footer-main {
+  height: 75px;
+  display: fixed;
+  background-color: rgb(222, 131, 131);
+  z-index: 10;
+}
+
+.footer-main nav a {
+  text-decoration: none;
+  color: white;
+}
+
+.footer-main nav a:hover {
+  color: #DAB37E;
+  border-bottom: 5px solid #DAB37E;
+}
+
+.footer-main li {
+  display: inline-block;
+  line-height: 75px;
+  margin-left: 90px;
+  font-weight: bold;
+}
+
+.footer-main li:first-child {
+  margin-left: 30px;
+}
