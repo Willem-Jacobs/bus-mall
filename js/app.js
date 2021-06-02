@@ -12,7 +12,6 @@ let allProducts = [];
 let duplicateNumbers = [];
 
 // JS to HTML links
-// let imagesContainer = document.getElementById('images-container');
 let displayContainer = document.getElementById('prod-container');
 let buttonGroup = document.getElementById('buttons');
 let leftImage = document.getElementById('image1');
@@ -65,10 +64,13 @@ function renderImages() {
   const index2 = duplicateNumbers[1];
   const index3 = duplicateNumbers[2];
   leftImage.src = allProducts[index1].displayImage;
+  leftImage.alt = allProducts[index1].name;
   allProducts[index1].showCount++;
   centerImage.src = allProducts[index2].displayImage;
+  leftImage.alt = allProducts[index2].name;
   allProducts[index2].showCount++;
   rightImage.src = allProducts[index3].displayImage;
+  leftImage.alt = allProducts[index3].name;
   allProducts[index3].showCount++;
 }
 
@@ -127,10 +129,6 @@ function restart() {
   buildProducts();
 }
 
-
 // Start site
 buildProducts();
 renderImages();
-
-// Event listener
-// displayContainer.addEventListener('click', clickHandler);
