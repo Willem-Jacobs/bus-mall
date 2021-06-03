@@ -10,6 +10,9 @@ const sliceStart = imagesToDisplay;
 const sliceEnd = imagesToDisplay * 2;
 let allProducts = [];
 let duplicateNumbers = [];
+let productNames = [];
+let chartShownData = [];
+let chartClickedData = [];
 
 // JS to HTML links
 let displayContainer = document.getElementById('prod-container');
@@ -21,6 +24,8 @@ let statusArea = document.querySelector('aside ul');
 statusArea.innterHTML = '';
 let displayMessage = document.getElementById('message');
 displayMessage.textContent = 'Click on an image please!';
+let ctx = document.getElementById('myChart').getContext('2d');
+let chart = document.getElementById('chart');
 
 // Constructor for Product
 function Product(name, image) {
@@ -45,6 +50,8 @@ function buildProducts() {
   for (let i = 0; i < allProductImages.length; i++) {
 
     new Product(allProductImages[i].slice(0, -4).capitalize(), `img/${allProductImages[i]}`);
+    productNames.push(allProductImages[i].slice(0, -4).capitalize());
+
   }
   displayContainer.addEventListener('click', clickHandler);
 }
@@ -114,6 +121,7 @@ function displayResultsHandler() {
     Shown: ${allProducts[i].showCount}.<br><hr>`;
     statusArea.appendChild(el);
   }
+  buildChartData();
   buttonGroup.removeEventListener('click', displayResultsHandler);
   buttonGroup.textContent = 'Click to Restart';
   buttonGroup.addEventListener('click', restart);
@@ -121,12 +129,57 @@ function displayResultsHandler() {
 
 function restart() {
   allProducts = [];
+  chartClickedData = [];
+  chartShownData = [];
+  productNames = [];
   buttonGroup.style.display = 'none';
   buttonGroup.textContent = 'View Results';
   statusArea.innerHTML = '';
   totalClicks = numberOfRounds + 1;
   buttonGroup.removeEventListener('click', restart);
   buildProducts();
+}
+
+function buildChartData() {
+  for (let i = 0; i < allProducts.length; i++) {
+    chartClickedData.push(allProducts[i].clickCount);
+    chartShownData.push(allProducts[i].showCount);
+  }
+  chart.style.display = 'block';
+  displayChart();
+}
+
+function displayChart(){
+  myChart = new Chart(ctx, {//eslint-disable-line no-undef
+    type: 'bar',
+    data: {
+      labels: productNames,
+      datasets: [{
+        label: 'Clicks',
+        data: chartClickedData,
+        backgroundColor: 'rgb(122, 163, 235)',
+        borderColor: '#000',
+        borderWidth: 1
+      },
+      {
+        label: 'Shown',
+        data: chartShownData,
+        backgroundColor: 'rgb(222, 131, 131)',
+        borderColor: '#000',
+        borderWidth: 1 ,
+      }]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          stacked: true
+        }],
+        yAxes: [{
+          stacked: true
+        }]
+      }
+    }
+  });
 }
 
 // Start site
