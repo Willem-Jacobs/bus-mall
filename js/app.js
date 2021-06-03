@@ -155,28 +155,26 @@ function displayChart(){
     data: {
       labels: productNames,
       datasets: [{
-        label: 'Clicks',
+        label: '# of Clicks',
         data: chartClickedData,
         backgroundColor: 'rgb(122, 163, 235)',
-        borderColor: '#000',
+        borderColor: 'black',
         borderWidth: 1
       },
       {
-        label: 'Shown',
+        label: '# Times Shown',
         data: chartShownData,
         backgroundColor: 'rgb(222, 131, 131)',
-        borderColor: '#000',
+        borderColor: 'black',
         borderWidth: 1 ,
       }]
     },
     options: {
-      scales: {
-        xAxes: [{
-          stacked: true
-        }],
-        yAxes: [{
-          stacked: true
-        }]
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'left'
+        }
       }
     }
   });
