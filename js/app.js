@@ -10,6 +10,9 @@ const sliceStart = imagesToDisplay;
 const sliceEnd = imagesToDisplay * 2;
 let allProducts = [];
 let duplicateNumbers = [];
+let productNames = [];
+let chartShownData = [];
+let chartClickedData = [];
 
 // JS to HTML links
 let displayContainer = document.getElementById('prod-container');
@@ -21,6 +24,8 @@ let statusArea = document.querySelector('aside ul');
 statusArea.innterHTML = '';
 let displayMessage = document.getElementById('message');
 displayMessage.textContent = 'Click on an image please!';
+let ctx = document.getElementById('mychart').getContext('2d');
+let chart = document.getElementById('chart');
 
 // Constructor for Product
 function Product(name, image) {
@@ -45,6 +50,8 @@ function buildProducts() {
   for (let i = 0; i < allProductImages.length; i++) {
 
     new Product(allProductImages[i].slice(0, -4).capitalize(), `img/${allProductImages[i]}`);
+    productNames.push(allProductImages[i].slice(0, -4).capitalize());
+
   }
   displayContainer.addEventListener('click', clickHandler);
 }
@@ -115,18 +122,66 @@ function displayResultsHandler() {
     statusArea.appendChild(el);
   }
   buttonGroup.removeEventListener('click', displayResultsHandler);
+  console.log('removed event"');
   buttonGroup.textContent = 'Click to Restart';
+  console.log('changed text');
   buttonGroup.addEventListener('click', restart);
+  console.log('added restart listener');
+  buildChartData();
 }
 
 function restart() {
   allProducts = [];
+  chartClickedData = [];
+  chartShownData = [];
+  productNames = [];
   buttonGroup.style.display = 'none';
   buttonGroup.textContent = 'View Results';
   statusArea.innerHTML = '';
   totalClicks = numberOfRounds + 1;
   buttonGroup.removeEventListener('click', restart);
+  chart.destroy();
   buildProducts();
+}
+
+function buildChartData() {
+  for (let i = 0; i < allProducts.length; i++) {
+    chartClickedData.push(allProducts[i].clickCount);
+    chartShownData.push(allProducts[i].showCount);
+  }
+  chart.style.display = 'block';
+  displayChart();
+}
+
+function displayChart(){
+  chart = new Chart(ctx, {//eslint-disable-line no-undef
+    type: 'bar',
+    data: {
+      labels: productNames,
+      datasets: [{
+        label: '# of Clicks',
+        data: chartClickedData,
+        backgroundColor: 'rgb(122, 163, 235)',
+        borderColor: 'black',
+        borderWidth: 1
+      },
+      {
+        label: '# Times Shown',
+        data: chartShownData,
+        backgroundColor: 'rgb(222, 131, 131)',
+        borderColor: 'black',
+        borderWidth: 1 ,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'left'
+        }
+      }
+    }
+  });
 }
 
 // Start site
