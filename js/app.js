@@ -24,7 +24,7 @@ let statusArea = document.querySelector('aside ul');
 statusArea.innterHTML = '';
 let displayMessage = document.getElementById('message');
 displayMessage.textContent = 'Click on an image please!';
-let ctx = document.getElementById('myChart').getContext('2d');
+let ctx = document.getElementById('mychart').getContext('2d');
 let chart = document.getElementById('chart');
 
 // Constructor for Product
@@ -121,10 +121,13 @@ function displayResultsHandler() {
     Shown: ${allProducts[i].showCount}.<br><hr>`;
     statusArea.appendChild(el);
   }
-  buildChartData();
   buttonGroup.removeEventListener('click', displayResultsHandler);
+  console.log('removed event"');
   buttonGroup.textContent = 'Click to Restart';
+  console.log('changed text');
   buttonGroup.addEventListener('click', restart);
+  console.log('added restart listener');
+  buildChartData();
 }
 
 function restart() {
@@ -137,6 +140,7 @@ function restart() {
   statusArea.innerHTML = '';
   totalClicks = numberOfRounds + 1;
   buttonGroup.removeEventListener('click', restart);
+  chart.destroy();
   buildProducts();
 }
 
@@ -150,7 +154,7 @@ function buildChartData() {
 }
 
 function displayChart(){
-  myChart = new Chart(ctx, {//eslint-disable-line no-undef
+  chart = new Chart(ctx, {//eslint-disable-line no-undef
     type: 'bar',
     data: {
       labels: productNames,
