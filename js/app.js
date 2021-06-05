@@ -16,16 +16,12 @@ let chartClickedData = [];
 
 // JS to HTML links
 let displayContainer = document.getElementById('prod-container');
-let buttonGroup = document.getElementById('buttons');
 let leftImage = document.getElementById('image1');
 let centerImage = document.getElementById('image2');
 let rightImage = document.getElementById('image3');
-let statusArea = document.querySelector('aside ul');
-statusArea.innterHTML = '';
 let displayMessage = document.getElementById('message');
 displayMessage.textContent = 'Click on an image please!';
 let ctx = document.getElementById('mychart').getContext('2d');
-let chart = document.getElementById('chart');
 
 // Constructor for Product
 function Product(name, image) {
@@ -47,11 +43,17 @@ function randomGenerator() {
 }
 
 function buildProducts() {
-  for (let i = 0; i < allProductImages.length; i++) {
-
-    new Product(allProductImages[i].slice(0, -4).capitalize(), `img/${allProductImages[i]}`);
-    productNames.push(allProductImages[i].slice(0, -4).capitalize());
-
+  let storageProducts = JSON.parse(localStorage.getItem('products'));
+  if (storageProducts) {
+    allProducts = storageProducts;
+    for (let i = 0; i < allProductImages.length; i++) {
+      productNames.push(allProductImages[i].slice(0, -4).capitalize());
+    }
+  } else {
+    for (let i = 0; i < allProductImages.length; i++) {
+      new Product(allProductImages[i].slice(0, -4).capitalize(), `img/${allProductImages[i]}`);
+      productNames.push(allProductImages[i].slice(0, -4).capitalize());
+    }
   }
   displayContainer.addEventListener('click', clickHandler);
 }
@@ -105,56 +107,25 @@ function clickHandler(event) {
   duplicateNumbers = duplicateNumbers.slice(sliceStart,sliceEnd);
   if (totalClicks === 0) {
     displayContainer.removeEventListener('click', clickHandler);
-    buttonGroup.style.display = 'block';
-    buttonGroup.addEventListener('click', displayResultsHandler);
+    localStorage.setItem('products', JSON.stringify(allProducts));
+    buildChartData();
+    return;
   }
   renderImages();
 }
 
-function displayResultsHandler() {
-  statusArea.innerHTML = '';
-  for (let i = 0; i < allProducts.length; i++ ) {
-    let el = document.createElement('li');
-    el.innerHTML = `
-    ${allProducts[i].name}:<br>
-    clicked: ${allProducts[i].clickCount}.<br>
-    Shown: ${allProducts[i].showCount}.<br><hr>`;
-    statusArea.appendChild(el);
-  }
-  buttonGroup.removeEventListener('click', displayResultsHandler);
-  console.log('removed event"');
-  buttonGroup.textContent = 'Click to Restart';
-  console.log('changed text');
-  buttonGroup.addEventListener('click', restart);
-  console.log('added restart listener');
-  buildChartData();
-}
-
-function restart() {
-  allProducts = [];
-  chartClickedData = [];
-  chartShownData = [];
-  productNames = [];
-  buttonGroup.style.display = 'none';
-  buttonGroup.textContent = 'View Results';
-  statusArea.innerHTML = '';
-  totalClicks = numberOfRounds + 1;
-  buttonGroup.removeEventListener('click', restart);
-  chart.destroy();
-  buildProducts();
-}
-
 function buildChartData() {
+  console.log('Build Chart Data');
   for (let i = 0; i < allProducts.length; i++) {
     chartClickedData.push(allProducts[i].clickCount);
     chartShownData.push(allProducts[i].showCount);
   }
-  chart.style.display = 'block';
+  // chart.style.display = 'block';
   displayChart();
 }
 
 function displayChart(){
-  chart = new Chart(ctx, {//eslint-disable-line no-undef
+  let myChart = new Chart(ctx, { //eslint-disable-line no-undef
     type: 'bar',
     data: {
       labels: productNames,
