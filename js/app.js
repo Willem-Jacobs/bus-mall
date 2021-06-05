@@ -2,7 +2,7 @@
 
 // Global variabls
 const allProductImages = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'water-can.jpg', 'wine-glass.jpg'];
-const numberOfRounds = 10;
+const numberOfRounds = 25;
 let totalClicks = numberOfRounds;
 const imagesToDisplay = 3;
 const duplicateTop = imagesToDisplay * 2;
@@ -120,7 +120,6 @@ function buildChartData() {
     chartClickedData.push(allProducts[i].clickCount);
     chartShownData.push(allProducts[i].showCount);
   }
-  // chart.style.display = 'block';
   displayChart();
 }
 
