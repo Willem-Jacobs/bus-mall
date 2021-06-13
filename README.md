@@ -6,7 +6,9 @@ Lab-11. Initial app. Display 3 images unique can't repeat in 2 runs let user sel
 
 lab-11. Stretch goals. Adding functionality to implement the stretch goals. This is work in progress.
 
-lab 13 - Added the chart & local storage
+lab-12. Added the chart to the app and no repeat of images for 2 rounds.
+
+lab-13. Added local storage.
 
 ### Author: Willem Jacobs
 
